@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  password    String 
+  submission  Submissions[]      
+}
+
+
+model Problem {
+  id                 String              @id @default(cuid())
+  title              String
+  description        String
+  slug               String              @unique
+  solved             Int                 @default(0)
+  createdAt          DateTime            @default(now())
+  defaultCode        DefaultCode[]
+  sumbissions        Submissions[]
+}
+
+model Language {
+  id          Int           @id @default(autoincrement())
+  name        String
+  judge0Id    Int           @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model DefaultCode {
+  id         String   @id @default(cuid())
+  languageId Int
+  problemId  String
+  code       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  problem    Problem  @relation(fields: [problemId], references: [id])
+}
+
+model Submissions {
+  id          String            @id @default(cuid())
+  judge0Token String
+  languageId  Int
+  problemId   String
+  userId      String
+  code        String
+  memory      Int
+  time        String
+  status      SubmissionResult  @default(PENDING)
+  createdAt   DateTime          @default(now())
+  problem     Problem           @relation(fields: [problemId], references: [id])
+  user        User              @relation(fields: [userId],   references: [id])
+}
+
+enum SubmissionResult {
+  ACCEPTED
+  REJECTED
+  PENDING
+}
