@@ -14,6 +14,7 @@ RUN pnpm install
 # Expose ports for both applications
 EXPOSE 3001
 EXPOSE 3003
+EXPOSE 5444
 
 # Command to start both services
 CMD ["npm", "run", "dev"]
