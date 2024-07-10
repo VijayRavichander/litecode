@@ -33,7 +33,7 @@ type defaultCode = {
   updatedAt: Date
 }
 
-const TEST_USER_ID = "clydd0fd00000snvl67o6wvnw"
+const TEST_USER_ID = "test"
 
 function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string}) {
 
