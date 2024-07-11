@@ -5,9 +5,9 @@ node_modules
 .pnp
 .pnp.js
 
-# Local env files
-.env
-.env*.local
+# # Local env files
+# .env
+# .env*.local
 
 # Testing
 coverage
@@ -17,12 +17,6 @@ coverage
 
 # Vercel
 .vercel
-
-# Build Outputs
-.next/
-out/
-build
-
 
 # Debug
 npm-debug.log*
