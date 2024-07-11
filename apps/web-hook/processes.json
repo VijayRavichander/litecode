@@ -1,0 +1,14 @@
+{
+    "apps": [
+      {
+        "name": "web-hook",
+        "script": "./web-hook/dist/index.js"
+      },
+      {
+        "name": "web-dev",
+        "script": "npm",
+        "args": "run dev"
+      }
+    ]
+  }
+  

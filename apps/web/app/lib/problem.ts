@@ -1,7 +1,6 @@
 import fs from "fs"
-import { resolve } from "path"
 
-const MOUNT_PATH = "/Users/vijayravichander/Code/litecode/litecode/apps/problems"
+const MOUNT_PATH = "/usr/src/app/apps/problems"
 
 
 export async function getInputs({slug} : {slug: string}){

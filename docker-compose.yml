@@ -1,15 +1,16 @@
 version: '3.5'
 
 services:
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: app-container
-  #   ports:
-  #     - '3001:3001'  # Next.js app
-  #   volumes:
-  #     - .:/usr/src/app
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app-container
+    ports:
+      - '3001:3001'  # Next.js app
+      - '3005:3005'
+    volumes:
+      - .:/usr/src/app
   db:
     image: postgres:alpine
     container_name: db
