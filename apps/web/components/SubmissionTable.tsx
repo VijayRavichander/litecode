@@ -27,6 +27,7 @@ interface Submissions {
     createdAt: string
 }
 
+const apiUrl = process.env.HOST_URL;
 
 export const SubmissionTable = ({userId, problemId} : SubmisionProps) => {
 
@@ -38,7 +39,7 @@ export const SubmissionTable = ({userId, problemId} : SubmisionProps) => {
         const getSumbissions = async (userId, problemId) => {
             console.log(userId, problemId)
 
-            const res = await axios.get("http://localhost:3001/api/v1/submissions", {
+            const res = await axios.get(`${apiUrl}/api/v1/submissions`, {
                 params: {
                     userId, 
                     problemId

@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: app-container
     ports:
-      - '3001:3001'  # Next.js app
+      - '3001:3001'
       - '3005:3005'
     volumes:
       - .:/usr/src/app

@@ -1,6 +1,6 @@
 import fs from "fs"
 
-const MOUNT_PATH = "/usr/src/app/apps/problems"
+const MOUNT_PATH = process.env.QUESTION_MOUNT_PATH
 
 
 export async function getInputs({slug} : {slug: string}){

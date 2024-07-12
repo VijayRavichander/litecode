@@ -2,16 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../../db";
 import { getFullCode, getInputs, getOutputs } from "../../../lib/problem";
 import axios from "axios"
-import { Sumana } from "next/font/google";
 
-const JUDGE0_URL = "http://host.docker.internal:2358"
-const JUDGE0_API = process.env.JUDGE0_API_KEY
-const JUDGE0_HOST = process.env.JUDGE0_HOST
-
+const JUDGE0_URL = process.env.JUDGE0_URL
 
 export async function POST(req: NextRequest){   
-
-
 
     try{
         var {code, languageId, userId, problemId, slug} = await req.json();
@@ -44,7 +38,7 @@ export async function POST(req: NextRequest){
             source_code: fullCode, 
             stdin: input, 
             expected_output: submissionMain.outputs[index], 
-            callback_url: "http://host.docker.internal:3005/judge0"
+            callback_url: "/judge0"
         }))
     
     
@@ -53,24 +47,9 @@ export async function POST(req: NextRequest){
         }, 
         {headers: {
             'Content-Type' : "application/json", 
-            // 'x-rapidapi-key': JUDGE0_API,
-            // 'x-rapidapi-host': JUDGE0_HOST,
         }})
     
         console.log(judgeReq.data)
-        // var tokens = ""
-    
-        // judgeReq.data.map((item, index) => (
-        //     tokens = tokens + item.token + ","
-        // ))
-        
-        // var tokenParams = tokens.slice(0, -1)
-    
-        // const judge0Response = await axios.get(`${JUDGE0_URL}/submissions/batch?tokens=${tokenParams}&fields=status,memory,time`, 
-        // {headers: {
-        //     // 'x-rapidapi-key': JUDGE0_API,
-        //     // 'x-rapidapi-host': JUDGE0_HOST,
-        // }})
     
         const submission = await db.submissions.create({
             data: {

@@ -32,6 +32,7 @@ type defaultCode = {
   createdAt: Date,
   updatedAt: Date
 }
+const apiUrl = process.env.HOST_URL;
 
 const TEST_USER_ID = "test"
 
@@ -62,7 +63,7 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
 
     await new Promise((resolve) => setTimeout(resolve, 2000))
     
-    const submissionId = await axios.post("http://localhost:3001/api/v1/problem", {
+    const submissionId = await axios.post(`${apiUrl}/api/v1/problem`, {
       userId: TEST_USER_ID, 
       code: code,
       languageId: editorLanguage, 
@@ -72,7 +73,7 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
 
     console.log(submissionId.data.id)
 
-    const submissionStatus = await axios.get("http://localhost:3001/api/v1/submission", {
+    const submissionStatus = await axios.get(`${apiUrl}/api/v1/submission`, {
       params: {submissionID: submissionId.data.id}
     })
 
