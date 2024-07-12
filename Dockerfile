@@ -1,19 +1,26 @@
-# Use the specified base image
 FROM node:20-alpine
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
+# Copy package.json and pnpm-lock.yaml first to leverage Docker cache
+COPY package.json pnpm-lock.yaml ./
+
+# Install global dependencies
+RUN npm install -g pnpm pm2
+
+# Install dependencies
+RUN pnpm install
+
 # Copy the entire monorepo into the container
 COPY . .
 
-
-# Install dependencies
-RUN npm install -g pnpm pm2
-RUN pnpm install 
+# Generate Prisma client
 RUN cd packages/db && pnpm dlx prisma generate
-RUN cd apps/web-hook && npm i 
 
+# Ensure all necessary dependencies are installed in the web-hook and web-dev directories
+RUN cd apps/web-hook && pnpm install
+RUN cd apps/web && pnpm install
 
 # Expose ports for both applications
 EXPOSE 3001
