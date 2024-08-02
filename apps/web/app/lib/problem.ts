@@ -1,6 +1,5 @@
 import fs from "fs"
-
-const MOUNT_PATH = process.env.QUESTION_MOUNT_PATH
+const MOUNT_PATH = process.env.QUESTION_MOUNT_PATH || "/Users/vijayravichander/Code/litecode/litecode/apps/problems"
 
 
 export async function getInputs({slug} : {slug: string}){

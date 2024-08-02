@@ -20,6 +20,7 @@ import axios from "axios";
 import { SubmissionTable } from "./SubmissionTable";
 import { useToast } from "@ui/components/ui/use-toast"
 
+
 type CodeEditorProps = {
   dCode: defaultCode[];
 };
@@ -32,17 +33,20 @@ type defaultCode = {
   createdAt: Date,
   updatedAt: Date
 }
-const apiUrl = process.env.HOST_URL;
+const apiUrl = process.env.HOST_URL || "."
 
 const TEST_USER_ID = "test"
 
 function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string}) {
 
   const [code, setCode] = useState('');
+  const [runCode, setRunCode] = useState('');
   const [editorLanguage, setEditorLanguage] = useState("cpp");
   const [loading, setLoading] = useState(true)
   const { toast } = useToast()
   const [submissionLoading, setSubmissionLoading] = useState(false)
+  const [runningLoading, setRunningLoading] = useState(false)
+
   
   useEffect(() => {
     const getFunctionCode = async () => {
@@ -56,14 +60,28 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
     return <div>Loading..</div>
   }
 
+  const onRun = async () => {
+
+    setRunningLoading(true)
+    
+    console.log(runCode.toString())
+    const singleSubmission = await axios.post(`/api/v1/problem`, {
+      userId: TEST_USER_ID, 
+      code: runCode,
+      languageId: editorLanguage, 
+      problemId: defaultCode[0].problemId, 
+      slug: slug
+    })
+
+    setRunningLoading(false)
+    
+  }
 
   const onSubmit = async () => {
 
     setSubmissionLoading(true)
-
-    await new Promise((resolve) => setTimeout(resolve, 2000))
     
-    const submissionId = await axios.post(`${apiUrl}/api/v1/problem`, {
+    const submissionId = await axios.post(`/api/v1/problem`, {
       userId: TEST_USER_ID, 
       code: code,
       languageId: editorLanguage, 
@@ -71,23 +89,36 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
       slug: slug
     })
 
-    console.log(submissionId.data.id)
+    const sumbissionStatusRes = []
+    for(const id of submissionId.data.id){
+      const submissionStatus = await axios.get(`/api/v1/submission`, {
+        params: {submissionID: id}
+      })
 
-    const submissionStatus = await axios.get(`${apiUrl}/api/v1/submission`, {
-      params: {submissionID: submissionId.data.id}
-    })
+      console.log(submissionStatus.data)
 
+      if(submissionStatus.data.id == 3){
+        sumbissionStatusRes.push(1)
+      }else if(submissionStatus.data.id == 1){
+        sumbissionStatusRes.push(0)
+      }
+      else{
+        sumbissionStatusRes.push(-2)
+      }
+    }
+
+    const sumbissionSum = sumbissionStatusRes.reduce((a, b) => Number(a) + Number(b), 0)
     setSubmissionLoading(false)
 
-    if(submissionStatus.data.message == "ACCEPTED"){
+    if(submissionId.data.id.length == sumbissionSum){
       toast({
         variant: "accept",
-        title: "✅ Accepted",
+        title: "Well Done!! Please Look at Sumbissions Tab for More Details",
       })
-    }else if(submissionStatus.data.message == "REJECTED"){
+    }else if(submissionId.data.id.length != sumbissionSum){
       toast({
         variant: "destructive",
-        title: "Rejected",
+        title: `Oops! | Number of Tests Passed ${sumbissionSum}/${submissionId.data.id.length} | Please Look at Sumbissions Tab for More Details`,
       })
     }else{
       toast({
@@ -118,14 +149,13 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
               <SelectValue placeholder="Language" />
             </SelectTrigger>
             <SelectContent className="max-w-2xl">
-              <SelectItem value="javascript">Javascript</SelectItem>
               <SelectItem value="cpp">CPP</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div>
           <Editor
-              height={"60vh"}
+              height={"50vh"}
               value={`${code}`}
               theme="vs-dark"
               language={editorLanguage}
@@ -141,17 +171,19 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
               defaultLanguage="cpp"
             />
         </div>
+        <div className="flex">
         <div className="my-2">
           {
-            submissionLoading ? <Button onClick={onSubmit} disabled>
+            submissionLoading ? <Button className= "bg-violet-700" onClick={onSubmit} disabled>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Submitting...
               </Button>
               : 
-              <Button onClick={onSubmit}>
+              <Button className= "bg-violet-700" onClick={onSubmit}>
                 Submit
               </Button>
           }
+        </div>
         </div>
       </div>
     </div>
@@ -163,7 +195,6 @@ function Submissions({userId, problemId} : {userId: string, problemId: string}) 
 }
 
 export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug: string}) {
-
 
   const [activeTab, setActiveTab] = useState("Submit");
 

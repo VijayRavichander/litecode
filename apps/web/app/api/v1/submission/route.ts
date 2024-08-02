@@ -5,11 +5,7 @@ export async function GET(req: NextRequest){
 
     var pollTimes = 10;
 
-    console.log(req.nextUrl.searchParams)
-
     const submissionID = req.nextUrl.searchParams.get('submissionID');
-
-    console.log(submissionID)
 
     if(!submissionID){
 
@@ -30,12 +26,11 @@ export async function GET(req: NextRequest){
             }
         })
 
-        console.log(submission)
-
 
         if(submission.status == "REJECTED"){
             return NextResponse.json({
-                message: "REJECTED"
+                message: "REJECTED",
+                id: 1
             }, {
                 status: 200
             })
@@ -43,7 +38,8 @@ export async function GET(req: NextRequest){
 
         if(submission.status  == "ACCEPTED"){
             return NextResponse.json({
-                message: "ACCEPTED"
+                message: "ACCEPTED",
+                id: 3
             }, {
                 status: 200
             })
@@ -53,7 +49,8 @@ export async function GET(req: NextRequest){
 
 
     return NextResponse.json({
-        message: "Error"
+        message: "Error",
+        id: 4
     }, {
         status: 404
     })

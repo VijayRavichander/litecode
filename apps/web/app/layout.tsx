@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Appbar } from "../components/Appbar";
 import { Toaster } from "@ui/components/ui/toaster"
-
+import Footer from "../components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,10 +22,12 @@ export default function RootLayout({
         <div>
           <Appbar />
         </div>
-        <div>
+        <div className="min-h-80">
           {children}
         </div>
-        <Toaster />
+          <Toaster />
+        
+          {/* <Footer /> */}
       </body>
     </html>
   );

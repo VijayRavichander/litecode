@@ -3,7 +3,20 @@ import fs from "fs";
 
 
 // Helper Function
-function promisifedReadFile(path: string): Promise<string> {
+export function promisifedDirectory(path: string): Promise<string[]>{
+    return new Promise((resolve, reject) => {
+        fs.readdir(path, "utf8", (err, data) => {
+            if(err){
+                reject(err);
+            }else{
+                console.log(data);
+                resolve(data);
+            }
+        })
+    })
+}
+
+export function promisifedReadFile(path: string): Promise<string> {
     return new Promise((resolve, reject) => {
       fs.readFile(path, "utf8", (err, data) => {
         if (err) {
@@ -12,7 +25,7 @@ function promisifedReadFile(path: string): Promise<string> {
         resolve(data);
       });
     });
-  }
+}
 
 
 (async () => {
@@ -39,10 +52,8 @@ function promisifedReadFile(path: string): Promise<string> {
             }
         })
         // Add Default Code for all Languages
-
-
-        const language_ext = ["cpp" , "js"]
-        const language_id = [54, 93]
+        const language_ext = ["cpp"]
+        const language_id = [54]
         
 
         for(let idx = 0; idx < language_ext.length; idx++){

@@ -16,8 +16,6 @@ app.put('/judge0', async (req: Request, res: Response) => {
 
         const firstToken = submissionTokens[0].token;
 
-        console.log(firstToken)
-
         const submission = await db.submissions.findFirst({
             where: {
                 //@ts-ignore
@@ -25,7 +23,6 @@ app.put('/judge0', async (req: Request, res: Response) => {
             }
         });
 
-        console.log(submission)
 
         for (const sub of submissionTokens) {
             if (sub.status.id !== 3) {

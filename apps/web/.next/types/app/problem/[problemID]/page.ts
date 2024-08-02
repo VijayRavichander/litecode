@@ -1,4 +1,4 @@
-// File: /usr/src/app/apps/web/app/problem/[problemID]/page.tsx
+// File: /Users/vijayravichander/Code/litecode/litecode/apps/web/app/problem/[problemID]/page.tsx
 import * as entry from '../../../../../app/problem/[problemID]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

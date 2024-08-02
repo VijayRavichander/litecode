@@ -1,0 +1,5 @@
+name = "cl-web-hook"
+compatibility_date = "2024-07-26"
+
+[vars]
+DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNGQwODEyNGQtODk2NS00MzM5LThjZTEtZGNhM2VhNjAzMzMzIiwidGVuYW50X2lkIjoiYjdkOWEyNDc3NTI4MDYyYzk5OTdjYjU4NGFmN2U2MzI3YWY5Yzg4NGJkMDI4ZmMyZDViYzVhMzFiOWQxNGYxNSIsImludGVybmFsX3NlY3JldCI6Ijg2NTIzYjUzLTZmYzMtNDQyMy1hYWMyLTg1ZGNiYTkwOWNkZiJ9.pOFbtSMgi-iyMGatTKnEt0JaSYF_t237dA4-mmT7zjs"
