@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
@@ -15,12 +9,13 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default("test")
-  email       String    @unique
-  password    String 
-  submission  Submissions[]      
+  id                        String                  @id @default(cuid())
+  email                     String                  @unique
+  password                  String 
+  submissions               Submission[]
+  contestSubmissions        ContestSubmission[]     
+  type                      String                  @default("user") 
 }
-
 
 model Problem {
   id                 String              @id @default(cuid())
@@ -30,7 +25,9 @@ model Problem {
   solved             Int                 @default(0)
   createdAt          DateTime            @default(now())
   defaultCode        DefaultCode[]
-  sumbissions        Submissions[]
+  submissions        Submission[]
+  contestSubmission  ContestSubmission[]
+  contestProblem     ContestProblem[]
 }
 
 model Language {
@@ -51,7 +48,7 @@ model DefaultCode {
   problem    Problem  @relation(fields: [problemId], references: [id])
 }
 
-model Submissions {
+model Submission {
   id          String            @id @default(cuid())
   judge0Token String
   languageId  Int
@@ -63,7 +60,40 @@ model Submissions {
   status      SubmissionResult  @default(PENDING)
   createdAt   DateTime          @default(now())
   problem     Problem           @relation(fields: [problemId], references: [id])
-  user        User              @relation(fields: [userId],   references: [id])
+  user        User              @relation(fields: [userId], references: [id])
+}
+
+model Contest {
+  id          String            @id @default(cuid())
+  name        String      
+  createdAt   DateTime          @default(now())
+  startsAt    DateTime
+  endsAt      DateTime 
+  problems    ContestProblem[]       
+}
+
+model ContestProblem {
+  id          String   @id @default(cuid())
+  contestId   String
+  problemId   String
+  contest     Contest  @relation(fields: [contestId], references: [id])
+  problem     Problem  @relation(fields: [problemId], references: [id])
+}
+
+model ContestSubmission {
+  id          String            @id @default(cuid())
+  judge0Token String
+  languageId  Int
+  problemId   String
+  contestId   String
+  userId      String
+  code        String
+  memory      Int
+  time        String
+  status      SubmissionResult  @default(PENDING)
+  createdAt   DateTime          @default(now())
+  problem     Problem           @relation(fields: [problemId], references: [id])
+  user        User              @relation(fields: [userId], references: [id])
 }
 
 enum SubmissionResult {
@@ -75,4 +105,3 @@ enum SubmissionResult {
   RUNTIMEERROR
   INTERNALERROR
 }
-

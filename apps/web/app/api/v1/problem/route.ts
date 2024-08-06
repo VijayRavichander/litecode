@@ -61,7 +61,7 @@ export async function POST(req: NextRequest){
         const submissionDBID = []
         // Added the Submission Tokens to the DB
         for (const sumbissionToken of sumbissionTokens) {
-            const submission = await db.submissions.create({
+            const submission = await db.submission.create({
                 data: {
                     code, 
                     languageId, 

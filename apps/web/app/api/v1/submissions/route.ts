@@ -8,7 +8,7 @@ export async function GET(req: NextRequest){
     const limit =   Number(req.nextUrl.searchParams.get('limit'));
     const offset =  Number(req.nextUrl.searchParams.get('offset'));
 
-    const res = await db.submissions.findMany({
+    const res = await db.submission.findMany({
         take: limit, // limit
         skip: offset, // offset
         where: {

@@ -1,6 +1,6 @@
 {
-  "/problem/[problemID]/page": "app/problem/[problemID]/page.js",
-  "/api/v1/submissions/route": "app/api/v1/submissions/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/profile/[profileID]/page": "app/profile/[profileID]/page.js",
+  "/page": "app/page.js",
   "/problems/page": "app/problems/page.js"
 }

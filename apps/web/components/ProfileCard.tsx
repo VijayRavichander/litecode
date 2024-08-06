@@ -5,8 +5,8 @@ import {
   AvatarImage,
 } from "@repo/ui/components/ui/avatar";
 
-export const ProfileCard = async ({ userId }: { userId: string }) => {
-  const submissions = await getSubmissions(userId);
+export const ProfileCard = async ({ profileID }: { profileID: string }) => {
+  const submissions = await getSubmissions(profileID);
   console.log(submissions);
 
   return (

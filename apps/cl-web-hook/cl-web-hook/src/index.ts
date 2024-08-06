@@ -25,7 +25,7 @@ app.put('/judge0', async (c) => {
     const sumbissionIDs = []
 
     for(let tokens = 0; tokens < submissionTokens.length; tokens++){
-        const submission = await prisma.submissions.findFirst({
+        const submission = await prisma.submission.findFirst({
           where: {
             judge0Token: submissionTokens[tokens].token,
           },
@@ -38,7 +38,7 @@ app.put('/judge0', async (c) => {
 
       // Processing
       if (sub.status.id == 1 || sub.status.id == 2) {
-        await prisma.submissions.update({
+        await prisma.submission.update({
           where: {
             id: sub.id,
           },
@@ -50,7 +50,7 @@ app.put('/judge0', async (c) => {
 
       // Right Answer
       else if (sub.status.id == 3) {
-        await prisma.submissions.update({
+        await prisma.submission.update({
           where: {
             id: sub.id,
           },
@@ -62,7 +62,7 @@ app.put('/judge0', async (c) => {
 
       // Wrong Answer
       else if(sub.status.id == 4){
-        await prisma.submissions.update({
+        await prisma.submission.update({
           where: {
             id: sub.id,
           },
@@ -74,7 +74,7 @@ app.put('/judge0', async (c) => {
 
       // TLE
         else if(sub.status.id == 5){
-          await prisma.submissions.update({
+          await prisma.submission.update({
             where: {
               id: sub.id,
             },
@@ -86,7 +86,7 @@ app.put('/judge0', async (c) => {
 
       // Compilation Error
       else if(sub.status.id == 6){
-        await prisma.submissions.update({
+        await prisma.submission.update({
           where: {
             id: sub.id,
           },
@@ -97,7 +97,7 @@ app.put('/judge0', async (c) => {
       }
 
       else if(sub.status.id > 6 && sub.status.id < 13){
-        await prisma.submissions.update({
+        await prisma.submission.update({
           where: {
             id: sub.id,
           },
@@ -108,7 +108,7 @@ app.put('/judge0', async (c) => {
       }
 
       else{
-        await prisma.submissions.update({
+        await prisma.submission.update({
           where: {
             id: sub.id,
           },

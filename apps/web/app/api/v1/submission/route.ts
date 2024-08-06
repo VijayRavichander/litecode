@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../../db";
-import { Sumana } from "next/font/google";
 
 type SubmissionResult = "TLE" | "COMPILATIONERROR" | "RUNTIMEERROR" | "REJECTED" | "INTERNALERROR" | "ACCEPTED";
 
@@ -16,14 +15,13 @@ export async function GET(req: NextRequest) {
         });
     }
 
-    
 
     for (let attempt = 0; attempt < pollTimes; attempt++) {
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
         let acceptedSubmissionCount = 0;
 
-        const submission = await db.submissions.findMany({
+        const submission = await db.submission.findMany({
             where: {
                 id: submissionID
             }

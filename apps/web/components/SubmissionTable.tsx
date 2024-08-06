@@ -64,7 +64,6 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
     getSumbissions(userId, problemId, limit, offset);
   }, [offset]);
 
-
   const handlePageChange = (offset) => {
     setOffset(offset)
   };
