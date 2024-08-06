@@ -37,7 +37,7 @@ app.put('/judge0', async (c) => {
     for (const sub of sumbissionIDs) {
 
       // Processing
-      if (sub.status.id == 2) {
+      if (sub.status.id == 1 || sub.status.id == 2) {
         await prisma.submissions.update({
           where: {
             id: sub.id,
@@ -61,7 +61,7 @@ app.put('/judge0', async (c) => {
       }
 
       // Wrong Answer
-      else{
+      else if(sub.status.id == 4){
         await prisma.submissions.update({
           where: {
             id: sub.id,
@@ -70,12 +70,57 @@ app.put('/judge0', async (c) => {
             status: 'REJECTED',
           },
         });
+      }
 
+      // TLE
+        else if(sub.status.id == 5){
+          await prisma.submissions.update({
+            where: {
+              id: sub.id,
+            },
+            data: {
+              status: 'TLE',
+            },
+          });
+        }
+
+      // Compilation Error
+      else if(sub.status.id == 6){
+        await prisma.submissions.update({
+          where: {
+            id: sub.id,
+          },
+          data: {
+            status: 'COMPILATIONERROR',
+          },
+        });
+      }
+
+      else if(sub.status.id > 6 && sub.status.id < 13){
+        await prisma.submissions.update({
+          where: {
+            id: sub.id,
+          },
+          data: {
+            status: 'RUNTIMEERROR',
+          },
+        });
+      }
+
+      else{
+        await prisma.submissions.update({
+          where: {
+            id: sub.id,
+          },
+          data: {
+            status: 'INTERNALERROR',
+          },
+        });
       }
     }
 
     return c.json({
-      message: "All Good"
+      message: "Submission Updated"
     }, 200);
 
   } catch (error) {

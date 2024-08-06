@@ -75,6 +75,12 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
         <Progress value={progress} />
     </div>;
   }
+
+  if (submissions.length == 0){
+    return <div className = "">
+      No Submissions Yet
+    </div>
+  }
   return (
     <div className="my-4">
       <Table>

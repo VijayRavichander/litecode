@@ -60,73 +60,51 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
     return <div>Loading..</div>
   }
 
-  const onRun = async () => {
-
-    setRunningLoading(true)
-    
-    console.log(runCode.toString())
-    const singleSubmission = await axios.post(`/api/v1/problem`, {
-      userId: TEST_USER_ID, 
-      code: runCode,
-      languageId: editorLanguage, 
-      problemId: defaultCode[0].problemId, 
-      slug: slug
-    })
-
-    setRunningLoading(false)
-    
-  }
-
   const onSubmit = async () => {
-
-    setSubmissionLoading(true)
+    setSubmissionLoading(true);
     
-    const submissionId = await axios.post(`/api/v1/problem`, {
-      userId: TEST_USER_ID, 
-      code: code,
-      languageId: editorLanguage, 
-      problemId: defaultCode[0].problemId, 
-      slug: slug
-    })
+    const toastMessages = {
+      3: { msg: "Accepted", variant: "accept" },
+      4: { msg: "Rejected", variant: "destructive" },
+      5: { msg: "Time Limit Exceeded", variant: "destructive" },
+      6: { msg: "Compilation Error", variant: "destructive" },
+      7: { msg: "Run Time Error", variant: "destructive" },
+      13: { msg: "Check Again Later", variant: "destructive" },
+    };
+  
+    try {
+      const submissionId = await axios.post(`/api/v1/problem`, {
+        userId: TEST_USER_ID,
+        code: code,
+        languageId: editorLanguage,
+        problemId: defaultCode[0].problemId,
+        slug: slug,
+      });
 
-    const sumbissionStatusRes = []
-    for(const id of submissionId.data.id){
-      const submissionStatus = await axios.get(`/api/v1/submission`, {
-        params: {submissionID: id}
-      })
+      const params = {
+        submissionID: submissionId.data.id[0], 
+      };
 
-      console.log(submissionStatus.data)
+      const submissionStatus = await axios.get(`/api/v1/submission`, {params})
 
-      if(submissionStatus.data.id == 3){
-        sumbissionStatusRes.push(1)
-      }else if(submissionStatus.data.id == 1){
-        sumbissionStatusRes.push(0)
+      const toastDetails = toastMessages[submissionStatus.data.id] || {};
+  
+      setSubmissionLoading(false);
+  
+      if (toastDetails.msg) {
+        toast({
+          variant: toastDetails.variant,
+          title: toastDetails.msg,
+        });
       }
-      else{
-        sumbissionStatusRes.push(-2)
-      }
-    }
-
-    const sumbissionSum = sumbissionStatusRes.reduce((a, b) => Number(a) + Number(b), 0)
-    setSubmissionLoading(false)
-
-    if(submissionId.data.id.length == sumbissionSum){
-      toast({
-        variant: "accept",
-        title: "Well Done!! Please Look at Sumbissions Tab for More Details",
-      })
-    }else if(submissionId.data.id.length != sumbissionSum){
+    } catch (error) {
+      setSubmissionLoading(false);
       toast({
         variant: "destructive",
-        title: `Oops! | Number of Tests Passed ${sumbissionSum}/${submissionId.data.id.length} | Please Look at Sumbissions Tab for More Details`,
-      })
-    }else{
-      toast({
-        variant: "destructive",
-        title: "Error",
-      })
+        title: "An error occurred",
+      });
     }
-  }
+  };
 
   return (
     <div>

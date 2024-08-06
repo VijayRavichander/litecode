@@ -1,7 +1,4 @@
 import {db} from "."
-import fs from "fs"
-
-
 
 export const getProblems = async () => {
     const problems = await db.problem.findMany({

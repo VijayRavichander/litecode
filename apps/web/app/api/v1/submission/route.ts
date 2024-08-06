@@ -1,57 +1,104 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../../db";
+import { Sumana } from "next/font/google";
 
-export async function GET(req: NextRequest){
+type SubmissionResult = "TLE" | "COMPILATIONERROR" | "RUNTIMEERROR" | "REJECTED" | "INTERNALERROR" | "ACCEPTED";
 
-    var pollTimes = 10;
-
+export async function GET(req: NextRequest) {
+    const pollTimes = 10;
     const submissionID = req.nextUrl.searchParams.get('submissionID');
-
-    if(!submissionID){
-
+    
+    if (!submissionID) {
         return NextResponse.json({
             message: "Error"
         }, {
             status: 404
-        })
+        });
     }
 
-    while(pollTimes > 0){
+    
 
-        await new Promise((resolve) => (setTimeout(resolve, 2000)))
+    for (let attempt = 0; attempt < pollTimes; attempt++) {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        const submission = await db.submissions.findUnique({
+        let acceptedSubmissionCount = 0;
+
+        const submission = await db.submissions.findMany({
             where: {
                 id: submissionID
             }
-        })
+        });
 
-
-        if(submission.status == "REJECTED"){
+        if (submission.length === 0) {
             return NextResponse.json({
-                message: "REJECTED",
-                id: 1
+                message: "Something Went Wrong",
+                id: 19
             }, {
-                status: 200
-            })
+                status: 500
+            });
         }
 
-        if(submission.status  == "ACCEPTED"){
-            return NextResponse.json({
-                message: "ACCEPTED",
-                id: 3
-            }, {
-                status: 200
-            })
+        for (const entry of submission) {
+            const status = entry.status as SubmissionResult; // Type assertion
+
+            switch (status) {
+                case "TLE":
+                    return NextResponse.json({
+                        message: "Time Limit Exceeded",
+                        id: 5
+                    }, {
+                        status: 200
+                    });
+                case "COMPILATIONERROR":
+                    return NextResponse.json({
+                        message: "Compilation Error",
+                        id: 6
+                    }, {
+                        status: 200
+                    });
+                case "RUNTIMEERROR":
+                    return NextResponse.json({
+                        message: "Run Time Error",
+                        id: 7
+                    }, {
+                        status: 200
+                    });
+                case "REJECTED":
+                    return NextResponse.json({
+                        message: "REJECTED",
+                        id: 4
+                    }, {
+                        status: 200
+                    });
+                case "INTERNALERROR":
+                    return NextResponse.json({
+                        message: "INTERNALERROR",
+                        id: 13
+                    }, {
+                        status: 200
+                    });
+                case "ACCEPTED":
+                    acceptedSubmissionCount++;
+                    if(acceptedSubmissionCount == submission.length){
+                        return NextResponse.json({
+                            message: "All Submissions Accepted",
+                            id: 3
+                        }, {
+                            status: 200
+                        });
+                    }
+                    break;
+                default:
+                    // handle unexpected statuses
+                    continue
+            }
         }
-        pollTimes = pollTimes - 1;
     }
 
-
-    return NextResponse.json({
-        message: "Error",
-        id: 4
-    }, {
-        status: 404
-    })
+        return NextResponse.json({
+            message: "Internal Server Error",
+            id: 21
+        }, {
+            status: 500
+        });
 }
