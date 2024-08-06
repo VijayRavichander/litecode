@@ -21,11 +21,10 @@ import {
 } from "@repo/ui/components/ui/pagination";
 
 import { Progress } from "@repo/ui/components/ui/progress"
-
-import { db } from "../app/db";
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { setFlagsFromString } from "v8";
 
 interface SubmisionProps {
   userId: string;
@@ -47,6 +46,7 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
   const [limit, setLimit] = useState(8);
   const [offset, setOffset] = useState(0);
   const [progress, setProgress] = useState(13)
+
 
   useEffect(() => {
     const getSumbissions = async (userId, problemId, limit, offset) => {
@@ -89,7 +89,7 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
         <TableBody>
           {submissions &&
             submissions.map((submission: Submissions) => (
-              <SubmisionRow key={submission.id} submission={submission} />
+                <SubmisionRow key={submission.id} submission={submission}/>
             ))}
         </TableBody>
       </Table>
@@ -118,10 +118,12 @@ const ConvertToLocaleTime = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleString();
 };
-const SubmisionRow = ({ submission }: { submission: Submissions }) => {
+const SubmisionRow = ({ submission}: { submission: Submissions}) => {
+
   return (
     <TableRow className="rounded m-3">
       <TableCell>
+      <Link href={`/submission/${submission.id}`}>
         <div
           className={`flex justify-between items-center ${submission.status == "ACCEPTED" ? "text-green-400" : "text-red-400"}`}
         >
@@ -131,8 +133,8 @@ const SubmisionRow = ({ submission }: { submission: Submissions }) => {
           </div>
           <div>{`${Number(submission.time) * 1000} ms`}</div>
         </div>
+       </Link>
       </TableCell>
-      {/* <TableCell className="">{submission.id}</TableCell> */}
     </TableRow>
   );
 };

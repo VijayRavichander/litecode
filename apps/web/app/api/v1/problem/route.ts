@@ -36,6 +36,10 @@ export async function POST(req: NextRequest){
             inputs,
             outputs
         }
+
+        console.log(fullCode)
+        console.log(inputs)
+        console.log(outputs)
         
         const submissionPayload = submissionBoilerPlate.inputs.map((input, index) => ({
             language_id: languageId, 
@@ -59,6 +63,7 @@ export async function POST(req: NextRequest){
         const sumbissionTokens = judgeRes.data
 
         const submissionDBID = []
+
         // Added the Submission Tokens to the DB
         for (const sumbissionToken of sumbissionTokens) {
             const submission = await db.submission.create({

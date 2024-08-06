@@ -81,6 +81,8 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
         slug: slug,
       });
 
+      console.log(submissionId.data.id)
+      
       const params = {
         submissionID: submissionId.data.id[0], 
       };

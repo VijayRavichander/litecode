@@ -26,6 +26,7 @@ export const getSubmissionByID = async ( { submissionID } : {submissionID: strin
         where: {
             id: submissionID
         }, select: {
+            id: true, 
             status : true, 
             createdAt: true, 
             code: true, 

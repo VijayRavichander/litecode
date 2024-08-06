@@ -63,6 +63,15 @@ model Submission {
   user        User              @relation(fields: [userId], references: [id])
 }
 
+enum SubmissionResult {
+  ACCEPTED
+  REJECTED
+  PENDING
+  TLE 
+  COMPILATIONERROR
+  RUNTIMEERROR
+  INTERNALERROR
+}
 model Contest {
   id          String            @id @default(cuid())
   name        String      
@@ -96,12 +105,4 @@ model ContestSubmission {
   user        User              @relation(fields: [userId], references: [id])
 }
 
-enum SubmissionResult {
-  ACCEPTED
-  REJECTED
-  PENDING
-  TLE 
-  COMPILATIONERROR
-  RUNTIMEERROR
-  INTERNALERROR
-}
+
