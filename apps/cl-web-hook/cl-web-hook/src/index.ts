@@ -21,103 +21,105 @@ app.put('/judge0', async (c) => {
 
     const body = await c.req.json();
 
-    const submissionTokens = [body];
-    const sumbissionIDs = []
+    const submissionToken = [body];
+    console.log(submissionToken)
+    
+    const judge0Tokens = []
 
-    for(let tokens = 0; tokens < submissionTokens.length; tokens++){
-        const submission = await prisma.submission.findFirst({
-          where: {
-            judge0Token: submissionTokens[tokens].token,
-          },
-        });
+    // for(let tokens = 0; tokens < submissionTokens.length; tokens++){
+    //     const submission = await prisma.submission.findFirst({
+    //       where: {
+    //         judge0Token: submissionTokens[tokens].token,
+    //       },
+    //     });
 
-        sumbissionIDs.push({status: submissionTokens[tokens].status, id: submission.id})
-    }
+    //     sumbissionIDs.push({status: submissionTokens[tokens].status, id: submission.id})
+    // }
 
-    for (const sub of sumbissionIDs) {
+    // for (const sub of sumbissionIDs) {
 
-      // Processing
-      if (sub.status.id == 1 || sub.status.id == 2) {
-        await prisma.submission.update({
-          where: {
-            id: sub.id,
-          },
-          data: {
-            status: 'PENDING',
-          },
-        });
-      }
+    //   // Processing
+    //   if (sub.status.id == 1 || sub.status.id == 2) {
+    //     await prisma.submission.update({
+    //       where: {
+    //         id: sub.id,
+    //       },
+    //       data: {
+    //         status: 'PENDING',
+    //       },
+    //     });
+    //   }
 
-      // Right Answer
-      else if (sub.status.id == 3) {
-        await prisma.submission.update({
-          where: {
-            id: sub.id,
-          },
-          data: {
-            status: 'ACCEPTED',
-          },
-        });
-      }
+    //   // Right Answer
+    //   else if (sub.status.id == 3) {
+    //     await prisma.submission.update({
+    //       where: {
+    //         id: sub.id,
+    //       },
+    //       data: {
+    //         status: 'ACCEPTED',
+    //       },
+    //     });
+    //   }
 
-      // Wrong Answer
-      else if(sub.status.id == 4){
-        await prisma.submission.update({
-          where: {
-            id: sub.id,
-          },
-          data: {
-            status: 'REJECTED',
-          },
-        });
-      }
+    //   // Wrong Answer
+    //   else if(sub.status.id == 4){
+    //     await prisma.submission.update({
+    //       where: {
+    //         id: sub.id,
+    //       },
+    //       data: {
+    //         status: 'REJECTED',
+    //       },
+    //     });
+    //   }
 
-      // TLE
-        else if(sub.status.id == 5){
-          await prisma.submission.update({
-            where: {
-              id: sub.id,
-            },
-            data: {
-              status: 'TLE',
-            },
-          });
-        }
+    //   // TLE
+    //     else if(sub.status.id == 5){
+    //       await prisma.submission.update({
+    //         where: {
+    //           id: sub.id,
+    //         },
+    //         data: {
+    //           status: 'TLE',
+    //         },
+    //       });
+    //     }
 
-      // Compilation Error
-      else if(sub.status.id == 6){
-        await prisma.submission.update({
-          where: {
-            id: sub.id,
-          },
-          data: {
-            status: 'COMPILATIONERROR',
-          },
-        });
-      }
+    //   // Compilation Error
+    //   else if(sub.status.id == 6){
+    //     await prisma.submission.update({
+    //       where: {
+    //         id: sub.id,
+    //       },
+    //       data: {
+    //         status: 'COMPILATIONERROR',
+    //       },
+    //     });
+    //   }
 
-      else if(sub.status.id > 6 && sub.status.id < 13){
-        await prisma.submission.update({
-          where: {
-            id: sub.id,
-          },
-          data: {
-            status: 'RUNTIMEERROR',
-          },
-        });
-      }
+    //   else if(sub.status.id > 6 && sub.status.id < 13){
+    //     await prisma.submission.update({
+    //       where: {
+    //         id: sub.id,
+    //       },
+    //       data: {
+    //         status: 'RUNTIMEERROR',
+    //       },
+    //     });
+    //   }
 
-      else{
-        await prisma.submission.update({
-          where: {
-            id: sub.id,
-          },
-          data: {
-            status: 'INTERNALERROR',
-          },
-        });
-      }
-    }
+    //   else{
+    //     await prisma.submission.update({
+    //       where: {
+    //         id: sub.id,
+    //       },
+    //       data: {
+    //         status: 'INTERNALERROR',
+    //       },
+    //     });
+    //   }
+    // }
 
     return c.json({
       message: "Submission Updated"
