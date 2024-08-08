@@ -11,9 +11,7 @@ export async function POST(req: NextRequest){
     try{
         var {code, languageId, userId, problemId, slug} = await req.json();
         var languageExt;
-        
-        console.log(code)
-        
+                
         // create hashmap and remove if else
         if(languageId == "cpp"){
             languageId = 54
@@ -25,30 +23,40 @@ export async function POST(req: NextRequest){
         }
 
         const driveCode: string = await getFullCode({problemId, languageExt, slug});
-        const fullCode  = driveCode.replace("##USER_CODE_HERE##", code)
+        const userCode: string  = driveCode.replace("##USER_CODE_HERE##", code)
 
         // Get Inputs and Outputs
         const inputs = await getInputs({slug});
         const outputs = await getOutputs({slug});
         
         const submissionBoilerPlate = {
-            fullCode, 
+            userCode, 
             inputs,
             outputs
         }
 
-        console.log(fullCode)
+        const submissionID = await db.submission.create({
+            data: {
+                problemId,
+                userId, 
+                code: userCode,
+                languageId
+            }
+        })
+
+        console.log(userCode)
         console.log(inputs)
         console.log(outputs)
         
         const submissionPayload = submissionBoilerPlate.inputs.map((input, index) => ({
             language_id: languageId, 
-            source_code: fullCode, 
+            source_code: userCode, 
             stdin: input, 
             expected_output: submissionBoilerPlate.outputs[index], 
             callback_url: CALLBACK_URL
         }))
         
+        console.log(submissionPayload)
 
         // Post Request to JUDGE0 
         const judgeRes = await axios.post(`${JUDGE0_URL}/submissions/batch`, {
@@ -60,32 +68,30 @@ export async function POST(req: NextRequest){
             'Content-Type': 'application/json'
         }})
 
-        const sumbissionTokens = judgeRes.data
+        const testCaseTokens = judgeRes.data
 
-        const submissionDBID = []
+        const testCaseIDs = []
+
 
         // Added the Submission Tokens to the DB
-        for (const sumbissionToken of sumbissionTokens) {
-            const submission = await db.submission.create({
+        for (const testCaseToken of testCaseTokens) {
+            const testCaseDB = await db.testCase.create({
                 data: {
-                    code, 
-                    languageId, 
-                    judge0Token: sumbissionToken.token,  
-                    userId, 
-                    problemId,
-                    memory: -1,
+                    judge0Token: testCaseToken.token,  
+                    memory: "NA",
                     time: "NA", 
-                    status: "PENDING"
+                    submissionId: submissionID.id,
                 }
             })
-            submissionDBID.push(submission.id);
+
+            console.log(submissionID.id);
+
+            testCaseIDs.push(testCaseDB.id);
         }
 
-        // Logging
-        // console.log(submissionDBID)
 
         return NextResponse.json({
-            id: submissionDBID
+            id: submissionID.id
         }, {
             status : 200
         })

@@ -12,7 +12,8 @@ export const getSubmissions = async ( { userID } : {userID : string}) => {
             status : true, 
             createdAt: true, 
             code: true, 
-            problem: true
+            problem: true,
+            testCase: true
         },
         orderBy: {
             createdAt:  'desc'
@@ -22,7 +23,9 @@ export const getSubmissions = async ( { userID } : {userID : string}) => {
 }
 
 export const getSubmissionByID = async ( { submissionID } : {submissionID: string}) => {
-    const userSubmissions = await db.submission.findMany({
+
+
+    const userSubmission = await db.submission.findFirst({
         where: {
             id: submissionID
         }, select: {
@@ -30,8 +33,10 @@ export const getSubmissionByID = async ( { submissionID } : {submissionID: strin
             status : true, 
             createdAt: true, 
             code: true, 
-            problem: true
+            problem: true,
+            testCase: true
         },
     });
-    return userSubmissions;
+
+    return {userSubmission};
 }

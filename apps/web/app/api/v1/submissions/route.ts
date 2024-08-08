@@ -18,7 +18,6 @@ export async function GET(req: NextRequest){
         select: {
             id: true,
             createdAt: true,
-            time: true,
             status: true,
         }, 
         orderBy: {

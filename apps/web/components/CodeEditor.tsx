@@ -37,7 +37,7 @@ const apiUrl = process.env.HOST_URL || "."
 
 const TEST_USER_ID = "test"
 
-function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string}) {
+function Submit ({defaultCode, slug, setActiveTab} : {defaultCode: defaultCode[], slug: string, setActiveTab: any}) {
 
   const [code, setCode] = useState('');
   const [runCode, setRunCode] = useState('');
@@ -84,21 +84,28 @@ function Submit ({defaultCode, slug} : {defaultCode: defaultCode[], slug: string
       console.log(submissionId.data.id)
       
       const params = {
-        submissionID: submissionId.data.id[0], 
+        submissionID: submissionId.data.id, 
       };
 
       const submissionStatus = await axios.get(`/api/v1/submission`, {params})
 
       const toastDetails = toastMessages[submissionStatus.data.id] || {};
-  
+      
+
+      // Change the state of Submit Button
       setSubmissionLoading(false);
-  
+      
+      // Trigger the Toast
       if (toastDetails.msg) {
         toast({
           variant: toastDetails.variant,
           title: toastDetails.msg,
         });
       }
+
+      // Change to Submission Tab
+      setActiveTab("Submissions")
+
     } catch (error) {
       setSubmissionLoading(false);
       toast({
@@ -195,7 +202,7 @@ export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug
           </TabsList>
         </Tabs>
         <div className = {`${activeTab == "Submit" ? "" : "hidden"}`}>
-          <Submit defaultCode={dCode} slug = {slug}/>
+          <Submit defaultCode={dCode} slug = {slug} setActiveTab = {setActiveTab}/>
         </div>
         <div>
           {activeTab == "Submissions" && <Submissions userId={TEST_USER_ID} problemId={dCode[0].problemId}/>}

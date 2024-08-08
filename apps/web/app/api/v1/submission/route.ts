@@ -21,63 +21,133 @@ export async function GET(req: NextRequest) {
 
         let acceptedSubmissionCount = 0;
 
-        const submission = await db.submission.findMany({
+
+        const testCase = await db.testCase.findMany({
             where: {
-                id: submissionID
+                submissionId: submissionID
             }
         });
 
-        if (submission.length === 0) {
+
+        if (!testCase) {
             return NextResponse.json({
-                message: "Something Went Wrong",
-                id: 19
+                message: "Something went wrong"
             }, {
-                status: 500
+                status: 404
             });
         }
 
-        for (const entry of submission) {
+        console.log(testCase)
+
+        for (const entry of testCase) {
             const status = entry.status as SubmissionResult; // Type assertion
 
             switch (status) {
                 case "TLE":
+
+                    await db.submission.update({
+                        where: {
+                            id: submissionID
+                        }, 
+                        data: {
+                            status: "TLE"
+                        }
+                    });
+
                     return NextResponse.json({
                         message: "Time Limit Exceeded",
                         id: 5
                     }, {
                         status: 200
                     });
+
+
                 case "COMPILATIONERROR":
+                    await db.submission.update({
+                        where: {
+                            id: submissionID
+                        }, 
+                        data: {
+                            status: "COMPILATIONERROR"
+                        }
+                    });
+
                     return NextResponse.json({
                         message: "Compilation Error",
                         id: 6
                     }, {
                         status: 200
                     });
+
+
+
                 case "RUNTIMEERROR":
+
+                    await db.submission.update({
+                        where: {
+                            id: submissionID
+                        }, 
+                        data: {
+                            status: "RUNTIMEERROR"
+                        }
+                    });
+
                     return NextResponse.json({
                         message: "Run Time Error",
                         id: 7
                     }, {
                         status: 200
                     });
+
+
                 case "REJECTED":
+
+                    await db.submission.update({
+                        where: {
+                            id: submissionID
+                        }, 
+                        data: {
+                            status: "REJECTED"
+                        }
+                    });
+
                     return NextResponse.json({
                         message: "REJECTED",
                         id: 4
                     }, {
                         status: 200
                     });
+
                 case "INTERNALERROR":
+                    await db.submission.update({
+                        where: {
+                            id: submissionID
+                        }, 
+                        data: {
+                            status: "INTERNALERROR"
+                        }
+                    });
+                    
                     return NextResponse.json({
                         message: "INTERNALERROR",
                         id: 13
                     }, {
                         status: 200
                     });
+
+
                 case "ACCEPTED":
                     acceptedSubmissionCount++;
-                    if(acceptedSubmissionCount == submission.length){
+                    if(acceptedSubmissionCount == testCase.length){
+                        await db.submission.update({
+                            where: {
+                                id: submissionID
+                            }, 
+                            data: {
+                                status: "ACCEPTED"
+                            }
+                        });
+
                         return NextResponse.json({
                             message: "All Submissions Accepted",
                             id: 3

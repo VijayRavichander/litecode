@@ -2,12 +2,20 @@ import { getSubmissionByID } from "../app/db/submission"
 
 export const DetailedSubmission = async ({submissionID} : {submissionID: string}) => {
     
-    const submission = await getSubmissionByID(submissionID);
+    const {userSubmission}  = await getSubmissionByID({submissionID});
 
-    console.log(submission)
+    const acceptedTestCases = userSubmission?.testCase.filter((item) => item.status == "ACCEPTED")
 
     return <div>
-        {submission[0].id}
+        <div>
+            {userSubmission?.problem.title}
+        </div>
+        <div>
+            Submitted On : {String(userSubmission?.createdAt)}
+        </div>
+        <div>
+            Accepted Test Cases: {acceptedTestCases?.length} / {userSubmission?.testCase.length}
+        </div>
     </div>
 }
 

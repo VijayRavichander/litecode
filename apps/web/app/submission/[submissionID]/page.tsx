@@ -11,6 +11,7 @@ interface PageProps {
 export default async function Page({params} : PageProps) {
 
   const {submissionID} = params
+  console.log(submissionID)
   return (
       <div className="flex flex-col min-h-screen">
         <div className="">

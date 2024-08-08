@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
+import { timeout } from 'hono/timeout'
 
 const app = new Hono<{
   Bindings: {
@@ -8,6 +9,9 @@ const app = new Hono<{
     JWT_SECRET: string
   }
 }>()
+
+// Utility function to create a delay
+app.use('/', timeout(5000))
 
 app.get('/', (c) => {
   return c.json({ message: 'Healthy' }, 200);
@@ -21,108 +25,113 @@ app.put('/judge0', async (c) => {
 
     const body = await c.req.json();
 
-    const submissionToken = [body];
-    console.log(submissionToken)
-    
-    const judge0Tokens = []
 
-    // for(let tokens = 0; tokens < submissionTokens.length; tokens++){
-    //     const submission = await prisma.submission.findFirst({
-    //       where: {
-    //         judge0Token: submissionTokens[tokens].token,
-    //       },
-    //     });
+    const submissions = [body];
 
-    //     sumbissionIDs.push({status: submissionTokens[tokens].status, id: submission.id})
-    // }
+    const testCases = []
 
-    // for (const sub of sumbissionIDs) {
+    for(let submission = 0; submission < submissions.length; submission++){
+        const testCase = await prisma.testCase.findFirst({
+          where: {
+            judge0Token: submissions[submission].token,
+          },
+        });
 
-    //   // Processing
-    //   if (sub.status.id == 1 || sub.status.id == 2) {
-    //     await prisma.submission.update({
-    //       where: {
-    //         id: sub.id,
-    //       },
-    //       data: {
-    //         status: 'PENDING',
-    //       },
-    //     });
-    //   }
+        console.log(testCase.id);
 
-    //   // Right Answer
-    //   else if (sub.status.id == 3) {
-    //     await prisma.submission.update({
-    //       where: {
-    //         id: sub.id,
-    //       },
-    //       data: {
-    //         status: 'ACCEPTED',
-    //       },
-    //     });
-    //   }
+        testCases.push({status: submissions[submission].status, id: testCase.id})
+    }
 
-    //   // Wrong Answer
-    //   else if(sub.status.id == 4){
-    //     await prisma.submission.update({
-    //       where: {
-    //         id: sub.id,
-    //       },
-    //       data: {
-    //         status: 'REJECTED',
-    //       },
-    //     });
-    //   }
+    for (const test of testCases) {
 
-    //   // TLE
-    //     else if(sub.status.id == 5){
-    //       await prisma.submission.update({
-    //         where: {
-    //           id: sub.id,
-    //         },
-    //         data: {
-    //           status: 'TLE',
-    //         },
-    //       });
-    //     }
+      // Processing
+      if (test.status.id == 1 || test.status.id == 2) {
+        await prisma.testCase.update({
+          where: {
+            id: test.id,
+          },
+          data: {
+            status: 'PENDING',
+          },
+        });
+      }
 
-    //   // Compilation Error
-    //   else if(sub.status.id == 6){
-    //     await prisma.submission.update({
-    //       where: {
-    //         id: sub.id,
-    //       },
-    //       data: {
-    //         status: 'COMPILATIONERROR',
-    //       },
-    //     });
-    //   }
+      // Right Answer
+      else if (test.status.id == 3) {
 
-    //   else if(sub.status.id > 6 && sub.status.id < 13){
-    //     await prisma.submission.update({
-    //       where: {
-    //         id: sub.id,
-    //       },
-    //       data: {
-    //         status: 'RUNTIMEERROR',
-    //       },
-    //     });
-    //   }
+        await prisma.testCase.update({
+          where: {
+            id: test.id,
+          },
+          data: {
+            status: 'ACCEPTED',
+          },
+        });
+      }
 
-    //   else{
-    //     await prisma.submission.update({
-    //       where: {
-    //         id: sub.id,
-    //       },
-    //       data: {
-    //         status: 'INTERNALERROR',
-    //       },
-    //     });
-    //   }
-    // }
+      // Wrong Answer
+      else if(test.status.id == 4){
+
+        await prisma.testCase.update({
+          where: {
+            id: test.id,
+          },
+          data: {
+            status: 'REJECTED',
+          },
+        });
+      }
+
+      // TLE
+        else if(test.status.id == 5){
+          console.log("TLE")
+          await prisma.testCase.update({
+            where: {
+              id: test.id,
+            },
+            data: {
+              status: 'TLE',
+            },
+          });
+        }
+
+      // Compilation Error
+      else if(test.status.id == 6){
+        await prisma.testCase.update({
+          where: {
+            id: test.id,
+          },
+          data: {
+            status: 'COMPILATIONERROR',
+          },
+        });
+      }
+
+      else if(test.status.id > 6 && test.status.id < 13){
+        await prisma.testCase.update({
+          where: {
+            id: test.id,
+          },
+          data: {
+            status: 'RUNTIMEERROR',
+          },
+        });
+      }
+
+      else{
+        await prisma.testCase.update({
+          where: {
+            id: test.id,
+          },
+          data: {
+            status: 'INTERNALERROR',
+          },
+        });
+      }
+    }
 
     return c.json({
-      message: "Submission Updated"
+      message: "Submission Received"
     }, 200);
 
   } catch (error) {

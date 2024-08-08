@@ -50,17 +50,26 @@ model DefaultCode {
 
 model Submission {
   id          String            @id @default(cuid())
-  judge0Token String
-  languageId  Int
   problemId   String
   userId      String
   code        String
-  memory      Int
-  time        String
+  languageId  Int
   status      SubmissionResult  @default(PENDING)
   createdAt   DateTime          @default(now())
   problem     Problem           @relation(fields: [problemId], references: [id])
   user        User              @relation(fields: [userId], references: [id])
+  testCase    TestCase[]
+}
+
+model TestCase {
+  id            String               @id @default(cuid())
+  judge0Token   String
+  memory        String
+  time          String
+  status        SubmissionResult     @default(PENDING)
+  createdAt     DateTime             @default(now())
+  submissionId  String
+  submission    Submission           @relation(fields: [submissionId], references: [id])
 }
 
 enum SubmissionResult {

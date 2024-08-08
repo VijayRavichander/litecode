@@ -1,15 +1,9 @@
 {
   "pages": {
-    "/problems/page": [
+    "/submission/[submissionID]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/problems/page.js"
-    ],
-    "/problems/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/problems/layout.css",
-      "static/chunks/app/problems/layout.js"
+      "static/chunks/app/submission/[submissionID]/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -22,15 +16,16 @@
       "static/chunks/main-app.js",
       "static/chunks/app/problem/[problemID]/page.js"
     ],
-    "/submission/[submissionID]/page": [
+    "/problems/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/submission/[submissionID]/page.js"
+      "static/chunks/app/problems/page.js"
     ],
-    "/profile/[profileID]/page": [
+    "/problems/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/profile/[profileID]/page.js"
+      "static/css/app/problems/layout.css",
+      "static/chunks/app/problems/layout.js"
     ]
   }
 }

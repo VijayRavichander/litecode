@@ -36,6 +36,7 @@ interface Submissions {
   time: string;
   status: string;
   createdAt: string;
+  testCase: any;
 }
 
 const apiUrl = process.env.HOST_URL || ".";
@@ -118,12 +119,13 @@ const ConvertToLocaleTime = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleString();
 };
+
 const SubmisionRow = ({ submission}: { submission: Submissions}) => {
 
   return (
     <TableRow className="rounded m-3">
       <TableCell>
-      <Link href={`/submission/${submission.id}`}>
+      {/* <Link href={`/submission/${submission.id}`}> */}
         <div
           className={`flex justify-between items-center ${submission.status == "ACCEPTED" ? "text-green-400" : "text-red-400"}`}
         >
@@ -131,9 +133,16 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
             <div>{submission.status}</div>
             <div>{ConvertToLocaleTime(submission.createdAt)}</div>
           </div>
-          <div>{`${Number(submission.time) * 1000} ms`}</div>
+          <div>
+            Accepted
+          </div>
+          <div>
+            {submission?.testCase.filter((item) => item.status == "ACCEPTED").length / submission.testCase.length()}
+          </div>
+          {/* <div>{`${Number(submission.time) * 1000} ms`}</div> */}
+          {/* <div>{submission.id}</div> */}
         </div>
-       </Link>
+       {/* </Link> */}
       </TableCell>
     </TableRow>
   );
