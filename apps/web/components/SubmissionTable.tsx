@@ -122,6 +122,19 @@ const ConvertToLocaleTime = (dateString: string) => {
 
 const SubmisionRow = ({ submission}: { submission: Submissions}) => {
 
+  const [accepted, setAccepted] =  useState(0)
+  const [total, setTotal] =  useState(0)
+
+  useEffect(() => {
+    console.log(submission)
+    if(submission.testCase){
+      const accepted = submission?.testCase.filter((item) => item.status == "ACCEPTED").length
+      setAccepted(accepted)
+      setTotal(submission.testCase.length)
+    }
+
+  }, [])
+
   return (
     <TableRow className="rounded m-3">
       <TableCell>
@@ -133,11 +146,10 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
             <div>{submission.status}</div>
             <div>{ConvertToLocaleTime(submission.createdAt)}</div>
           </div>
-          <div>
-            Accepted
-          </div>
-          <div>
-            {submission?.testCase.filter((item) => item.status == "ACCEPTED").length / submission.testCase.length()}
+          <div className="">
+            <div>
+              Test Cases Passed : {accepted} / {total}
+            </div>
           </div>
           {/* <div>{`${Number(submission.time) * 1000} ms`}</div> */}
           {/* <div>{submission.id}</div> */}

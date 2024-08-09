@@ -9,13 +9,16 @@ export function Appbar() {
         <span className="text-lg font-bold hover:text-black">LiteCode</span>
       </Link>
       <nav className="hidden md:flex items-center gap-6">
-        <Link href="/problems" className="hover:underline">
+        <Link href="/problems" className="hover:text-black">
           Problems
         </Link>
-        <Link href={`/profile/${id}`} className="hover:underline">
+        <Link href="/contest" className="hover:text-black">
+          Contests
+        </Link>
+        <Link href={`/profile/${id}`} className="hover:text-black">
             Profile
         </Link>
-        <Link href="/" className="hover:underline">
+        <Link href="/" className="hover:text-black">
             Logout
         </Link>
       </nav>

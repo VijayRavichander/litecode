@@ -12,9 +12,9 @@ model User {
   id                        String                  @id @default(cuid())
   email                     String                  @unique
   password                  String 
-  submissions               Submission[]
-  contestSubmissions        ContestSubmission[]     
   type                      String                  @default("user") 
+  submissions               Submission[]
+  contestSubmissions        ContestSubmission[]
 }
 
 model Problem {
@@ -22,12 +22,12 @@ model Problem {
   title              String
   description        String
   slug               String              @unique
+  type               String              @default("None")
   solved             Int                 @default(0)
   createdAt          DateTime            @default(now())
   defaultCode        DefaultCode[]
   submissions        Submission[]
-  contestSubmission  ContestSubmission[]
-  contestProblem     ContestProblem[]
+  ContestProblem     ContestProblem?
 }
 
 model Language {
@@ -59,6 +59,7 @@ model Submission {
   problem     Problem           @relation(fields: [problemId], references: [id])
   user        User              @relation(fields: [userId], references: [id])
   testCase    TestCase[]
+  contestSubmission ContestSubmission? 
 }
 
 model TestCase {
@@ -93,25 +94,20 @@ model Contest {
 model ContestProblem {
   id          String   @id @default(cuid())
   contestId   String
-  problemId   String
+  problemId   String   @unique
   contest     Contest  @relation(fields: [contestId], references: [id])
   problem     Problem  @relation(fields: [problemId], references: [id])
+  submissions ContestSubmission[]
 }
 
 model ContestSubmission {
-  id          String            @id @default(cuid())
-  judge0Token String
-  languageId  Int
-  problemId   String
-  contestId   String
-  userId      String
-  code        String
-  memory      Int
-  time        String
-  status      SubmissionResult  @default(PENDING)
-  createdAt   DateTime          @default(now())
-  problem     Problem           @relation(fields: [problemId], references: [id])
-  user        User              @relation(fields: [userId], references: [id])
+  id            String            @id @default(cuid())
+  problemId     String
+  userId        String
+  submissionId  String            @unique
+  user          User              @relation(fields: [userId], references: [id])
+  problem       ContestProblem    @relation(fields: [problemId], references: [id])
+  submission    Submission        @relation(fields: [submissionId], references: [id])
 }
 
 

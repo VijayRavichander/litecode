@@ -3,15 +3,18 @@ import Link from "next/link"
 export const LinkedButton = (
     {
         href, 
-        children
+        children,
+        className
     } : 
     {
         href: string, 
-        children: React.ReactNode
+        children: React.ReactNode,
+        className?: string
     }
 ) => {
     return <Link
     href = {href}
+    className=""
     >
         {children}
     </Link>

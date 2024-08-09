@@ -1,5 +1,8 @@
 {
-  "/submission/[submissionID]/page": "app/submission/[submissionID]/page.js",
-  "/problem/[problemID]/page": "app/problem/[problemID]/page.js",
+  "/contest/page": "app/contest/page.js",
+  "/contest/[contestID]/page": "app/contest/[contestID]/page.js",
+  "/contest/[contestID]/problem/[problemID]/page": "app/contest/[contestID]/problem/[problemID]/page.js",
+  "/page": "app/page.js",
+  "/profile/[profileID]/page": "app/profile/[profileID]/page.js",
   "/problems/page": "app/problems/page.js"
 }

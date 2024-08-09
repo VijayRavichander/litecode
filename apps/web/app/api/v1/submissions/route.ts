@@ -19,6 +19,7 @@ export async function GET(req: NextRequest){
             id: true,
             createdAt: true,
             status: true,
+            testCase: true
         }, 
         orderBy: {
             createdAt:  'desc'
