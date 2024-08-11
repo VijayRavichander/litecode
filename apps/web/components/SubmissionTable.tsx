@@ -85,7 +85,7 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
     <div className="my-4">
       <Table>
         <TableHeader>
-          <TableRow className="text-xl font-bold text-gray-700">SUBMISSION DETAILS</TableRow>
+          <TableRow className="text-xl font-bold text-black">SUBMISSION DETAILS</TableRow>
         </TableHeader>
         <TableBody>
           {submissions &&
@@ -98,16 +98,16 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious className = {`${offset == 0 ? "hidden" : ""}`} onClick={() => {handlePageChange(offset-10)}} />
+            <PaginationPrevious className = {`text-white ${offset == 0 ? "hidden" : ""}`} onClick={() => {handlePageChange(offset-10)}} />
           </PaginationItem>
           <PaginationItem>
             <PaginationLink onClick={() => {handlePageChange(0)}} >1</PaginationLink>
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink className = {`${offset == 0 && submissions.length < 8 ? "hidden" : ""}`} onClick={() => {handlePageChange(10)}} >2</PaginationLink>
+            <PaginationLink className = {`text-white ${offset == 0 && submissions.length < 8 ? "hidden" : ""}`} onClick={() => {handlePageChange(10)}} >2</PaginationLink>
           </PaginationItem>
           <PaginationItem>
-            <PaginationNext className = {`${submissions.length < 8 ? "hidden" : ""}`} onClick={() => {handlePageChange(offset+10)}}  />
+            <PaginationNext className = {`text-white ${submissions.length < 8 ? "hidden" : ""}`} onClick={() => {handlePageChange(offset+10)}}  />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
@@ -138,7 +138,6 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
   return (
     <TableRow className="rounded m-3">
       <TableCell>
-      {/* <Link href={`/submission/${submission.id}`}> */}
         <div
           className={`flex justify-between items-center ${submission.status == "ACCEPTED" ? "text-green-400" : "text-red-400"}`}
         >
@@ -151,10 +150,7 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
               Test Cases Passed : {accepted} / {total}
             </div>
           </div>
-          {/* <div>{`${Number(submission.time) * 1000} ms`}</div> */}
-          {/* <div>{submission.id}</div> */}
         </div>
-       {/* </Link> */}
       </TableCell>
     </TableRow>
   );

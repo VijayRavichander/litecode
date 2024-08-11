@@ -4,21 +4,21 @@ import Link from "next/link";
 export function Appbar() {
   const id = "test"
   return (
-    <header className="bg-violet-700 text-white px-4 md:px-6 py-2 flex items-center justify-between border-b-4 border-black">
+    <header className="bg-black text-white px-4 md:px-6 py-3 flex items-center justify-between border-b-2 border-violet-900">
       <Link href="/" className="flex items-center gap-2">
-        <span className="text-lg font-bold hover:text-black">LiteCode</span>
+        <span className="text-lg font-bold hover:text-violet-500">LiteCode</span>
       </Link>
       <nav className="hidden md:flex items-center gap-6">
-        <Link href="/problems" className="hover:text-black">
+        <Link href="/problems" className="hover:text-violet-500">
           Problems
         </Link>
-        <Link href="/contest" className="hover:text-black">
+        <Link href="/contest" className="hover:text-violet-500">
           Contests
         </Link>
-        <Link href={`/profile/${id}`} className="hover:text-black">
+        <Link href={`/profile/${id}`} className="hover:text-violet-500">
             Profile
         </Link>
-        <Link href="/" className="hover:text-black">
+        <Link href="/" className="hover:text-violet-500">
             Logout
         </Link>
       </nav>

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Appbar } from "../components/Appbar";
 import { Toaster } from "@ui/components/ui/toaster"
-import Footer from "../components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,16 +17,14 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} bg-neutral-900 text-white`}>
         <div>
           <Appbar />
         </div>
-        <div className="min-h-80">
+        <div className="min-h-screen">
           {children}
         </div>
-          <Toaster />
-        
-          {/* <Footer /> */}
+        <Toaster />
       </body>
     </html>
   );

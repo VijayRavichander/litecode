@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../../db";
 import { getFullCode, getInputs, getOutputs } from "../../../lib/problem";
 import axios from "axios"
+import { rateLimit } from "../../../lib/rateLimiting";
+
 
 const JUDGE0_URL = process.env.JUDGE0_URL
 const CALLBACK_URL = "https://cl-web-hook.vijaypreetham1.workers.dev/judge0"
@@ -20,6 +22,16 @@ export async function POST(req: NextRequest){
             languageId = 93
             languageExt = "js"
     
+        }
+
+        const isAllowed = await rateLimit(userId, 1, 30); 
+
+        if(!isAllowed){
+            return NextResponse.json({
+                message: "Too Many Requests. Please wait before trying again"
+            }, {
+                status: 429
+            })
         }
 
         const driveCode: string = await getFullCode({problemId, languageExt, slug});

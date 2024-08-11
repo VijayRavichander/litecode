@@ -13,7 +13,7 @@ export const ProfileCard = async ({ profileID }: { profileID: string }) => {
     <div>
       <div className="">
         <div className="flex">
-          <div className="border rounded m-4 p-2 flex my-5 justify-between items-center">
+          <div className="rounded-xl m-4 p-2 flex my-5 justify-between items-center bg-black text-gray-400">
             <div>
               <div>
                 <span className="text-lg text-gray-400">Profile Details</span>
@@ -26,7 +26,7 @@ export const ProfileCard = async ({ profileID }: { profileID: string }) => {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>
-            <div className="mx-5 text-lg font-semibold">
+            <div className="mx-5 text-lg font-semibold ">
               <div>UserName: test123</div>
               <div>Email-ID: test@gmail.com</div>
               <div>Joined On: 1st Aug 2024</div>
@@ -35,7 +35,7 @@ export const ProfileCard = async ({ profileID }: { profileID: string }) => {
           <div></div>
         </div>
         <div className="flex justify-between">
-          <div className="w-1/2 border rounded m-4 p-2">
+          <div className="w-1/2 rounded m-4 p-2 bg-black text-gray-400">
             <div className="text-lg text-gray-400">Recent Submissions</div>
             <div>
               {submissions &&
@@ -62,7 +62,7 @@ const ConvertToLocaleTime = (dateString: string) => {
 
 const SubmisionRow = ({ submission }: { submission: any }) => {
   return (
-    <div className="my-1 border-2 rounded">
+    <div className="my-1 border-b border-gray-900 rounded">
       <div className="m-3">
         <div>{submission.problem.slug}</div>
         <div className="flex justify-between text-sm">

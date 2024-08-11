@@ -1,8 +1,8 @@
 import HeroImage from "../assets/code_image.jpeg"
 import Image from 'next/image';
 export const Hero = () => {
-    return <div className="bg-black">
-<section className="">
+    return <div className="min-h-80 bg-black">
+    <div className="">
     <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 text-white ">
         <div className="mr-auto place-self-center lg:col-span-7">
             <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">Welcome to Litecode</h1>
@@ -15,11 +15,11 @@ export const Hero = () => {
                 Solve Problems
             </a> 
         </div>
-        <div className="hidden lg:mt-0 lg:col-span-5 lg:flex ">
+        <div className="hidden lg:mt-0 lg:col-span-5 lg:flex py-5">
             <Image className= "rounded-md" src={HeroImage} alt="mockup" />
         </div>                
     </div>
-</section>
+</div>
     </div>
 }
 

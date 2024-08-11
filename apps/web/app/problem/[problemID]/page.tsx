@@ -12,7 +12,7 @@ export default async function Page({
   const problem = await getProblem({problemID});
   
   return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-gray-700 text-black">
         <div className="grid grid-cols-2">
             <div className="col-span-1 min-h-screen">
                 <ProblemStatement description = {problem.description}/>

@@ -4,6 +4,7 @@ export const getProblems = async () => {
     const problems = await db.problem.findMany({
       include: {
         defaultCode: true,
+        submissions: true
       },
     });
     return problems;

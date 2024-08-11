@@ -33,6 +33,7 @@ type defaultCode = {
   createdAt: Date,
   updatedAt: Date
 }
+
 const apiUrl = process.env.HOST_URL || "."
 
 const TEST_USER_ID = "test"
@@ -102,16 +103,26 @@ function Submit ({defaultCode, slug, setActiveTab} : {defaultCode: defaultCode[]
           title: toastDetails.msg,
         });
       }
+      
+      const wait = await new Promise((resolve) => {setTimeout(resolve, 800)})
 
       // Change to Submission Tab
       setActiveTab("Submissions")
-
+      
     } catch (error) {
       setSubmissionLoading(false);
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-      });
+      console.log(error)
+      if(error.response && error.response.status == 429){
+        toast({
+          variant: "destructive",
+          title: "Too Many Requests. Please Try Again Later in Few Mintues",
+        });
+      }else{
+        toast({
+          variant: "destructive",
+          title: "An error occurred",
+        });
+      }
     }
   };
 
@@ -132,7 +143,7 @@ function Submit ({defaultCode, slug, setActiveTab} : {defaultCode: defaultCode[]
               }
             }}
           >
-            <SelectTrigger className="min-w-max">
+            <SelectTrigger className="min-w-max bg-gray-900 text-white">
               <SelectValue placeholder="Language" />
             </SelectTrigger>
             <SelectContent className="max-w-2xl">
@@ -148,8 +159,9 @@ function Submit ({defaultCode, slug, setActiveTab} : {defaultCode: defaultCode[]
               language={editorLanguage}
               onMount={() => {}}
               options={{
-                fontSize: 14,
+                fontSize: 12,
                 scrollBeyondLastLine: false,
+                minimap: {enabled: false}
               }}
               onChange={(value) => {
                 //@ts-ignore
@@ -188,7 +200,7 @@ export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug
   return (
     <div>
       <div>
-      <div className="px-2 text-lg font-bold text-violet-600 bg-black ">Code&lt;&gt;</div>
+      <div className="px-2 text-lg font-bold text-violet-600 border-b">Code&lt;&gt;</div>
       <div className="mt-2">
         <Tabs
           defaultValue="Submit"
@@ -196,7 +208,7 @@ export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug
           value={activeTab}
           onValueChange={(value) => setActiveTab(value)}
         >
-          <TabsList>
+          <TabsList className="bg-gray-900 text-white">
             <TabsTrigger value="Submit">Submit</TabsTrigger>
             <TabsTrigger value="Submissions">Submissions</TabsTrigger>
           </TabsList>

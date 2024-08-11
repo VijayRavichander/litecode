@@ -6,17 +6,22 @@ export default async function Page () {
 
 const contest = await db.contest.findMany({
     where: {
-
     }
 })
 
-return <div className="flex mx-10 my-5">
-    {
-        contest.map((item, index)=> (
-            <ContestCard key={index} item = {item} />
-        ))
-    }
+return(<div className="mx-10">
+    <div className="text-2xl my-5">On Going Contest</div>
+    <div className="flex  my-5">
+        {
+            contest.map((item, index)=> (
+                <ContestCard key={index} item = {item} />
+            ))
+        }
+    </div>
+    <div className="text-2xl my-5">Upcoming Contest</div>
+
 </div>
+)
 }
 
 const ContestCard = ({item} : {item: any}) => {
@@ -27,12 +32,12 @@ const ContestCard = ({item} : {item: any}) => {
     const currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles', hour12: true })
 
 
-    return <div>
-        <Card className="p-5">
-            <CardTitle>{item.name}</CardTitle>
-            <CardDescription>Start At: {startTime} PDT</CardDescription>
+    return <div className="text-white">
+        <Card className="p-5 bg-black border-0 rounded-sm">
+            <CardTitle className="text-white">{item.name}</CardTitle>
+            <CardDescription className="text-white">Starts At: {startTime} PDT</CardDescription>
             <div>
-                <Button disabled = {currentTime < endTime}>
+                <Button variant = "secondary" disabled = {currentTime > endTime} className="my-4">
                     <Link href={`contest/${item.id}`} >
                         Compete
                     </Link>

@@ -17,7 +17,20 @@ interface Problems {
   slug: string;
   solved: string;
   createdAt: Date;
+  submissions: Submission[]
 }
+
+interface Submission {
+  id: string; 
+  problemId: string; 
+  userId: string; 
+  code: string; 
+  languageId: number; 
+  status: string; 
+  createdAt: Date;
+}
+
+
 
 export default async function ProblemTable() {
   const problems: Problems[] = await getProblems();
@@ -25,7 +38,6 @@ export default async function ProblemTable() {
 
   return (
     <Table>
-      <TableCaption>Problems</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Title</TableHead>
@@ -45,15 +57,26 @@ export default async function ProblemTable() {
 }
 
 const ProblemRow = ({ problem }: { problem: Problems }) => {
+
+  const acceptedSolutions = problem.submissions.filter((item, index) => (item.status == "ACCEPTED")).length;
+  const totalSolutions = problem.submissions.length;
+  const acceptedPercentage = totalSolutions != 0 ? (acceptedSolutions / totalSolutions) : 0
+  const difficulty = acceptedPercentage < 0.20 ? "Hard" : acceptedPercentage < 0.50 ? "Medium" : "Easy"
   return (
     <TableRow>
-      <TableCell className="font-medium hover:underline">
+      <TableCell className="text-lg font-bold hover:text-violet-800">
         <LinkedButton href={`/problem/${problem.id}`}>
           {problem.title}
         </LinkedButton>
       </TableCell>
-      <TableCell>Medium</TableCell>
-      <TableCell>80%</TableCell>
+      <TableCell
+      className={`${difficulty == "Easy" ? "text-green-500" : difficulty == "Medium" ? "text-yellow-500" : "text-red-500"}`}
+      >
+        {difficulty}
+      </TableCell>
+      <TableCell
+      className="font-thin"
+      >{(acceptedPercentage * 100).toFixed(2)}%</TableCell>
       <TableCell>
         <svg
           xmlns="http://www.w3.org/2000/svg"
