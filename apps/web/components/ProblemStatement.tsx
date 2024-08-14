@@ -9,11 +9,13 @@ type ProblemStatementProps = {
 export default function ProblemStatement({description} : ProblemStatementProps) {
 
     return (
-        <div className=''>
-            <div className='px-4 text-lg font-bold text-violet-600 border-b mb-2'>Description</div>
-            <div className='prose prose-sm pl-4 text-black'>
+        <div className='bg-gray-400 rounded-sm my-2 min-h-screen'>
+            <div className='px-4 text-lg font-bold text-violet-600 border-b border-black'>Description</div>
+        <div className='p-3'>
+            <div className='prose prose-sm  text-black'>
                 <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
             </div>
+        </div>
         </div>
 
     )

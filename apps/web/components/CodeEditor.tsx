@@ -36,8 +36,6 @@ type defaultCode = {
 
 const apiUrl = process.env.HOST_URL || "."
 
-const TEST_USER_ID = "test"
-
 function Submit ({defaultCode, slug, setActiveTab} : {defaultCode: defaultCode[], slug: string, setActiveTab: any}) {
 
   const [code, setCode] = useState('');
@@ -75,7 +73,6 @@ function Submit ({defaultCode, slug, setActiveTab} : {defaultCode: defaultCode[]
   
     try {
       const submissionId = await axios.post(`/api/v1/problem`, {
-        userId: TEST_USER_ID,
         code: code,
         languageId: editorLanguage,
         problemId: defaultCode[0].problemId,
@@ -189,8 +186,8 @@ function Submit ({defaultCode, slug, setActiveTab} : {defaultCode: defaultCode[]
   );
 }
 
-function Submissions({userId, problemId} : {userId: string, problemId: string}) {
-  return <SubmissionTable userId={userId} problemId={problemId}/>;
+function Submissions({problemId} : { problemId: string}) {
+  return <SubmissionTable  problemId={problemId}/>;
 }
 
 export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug: string}) {
@@ -198,9 +195,9 @@ export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug
   const [activeTab, setActiveTab] = useState("Submit");
 
   return (
-    <div>
+    <div className="bg-black">
       <div>
-      <div className="px-2 text-lg font-bold text-violet-600 border-b">Code&lt;&gt;</div>
+      <div className="text-lg border-b text-violet-500 font-bold">Code&lt;&gt;</div>
       <div className="mt-2">
         <Tabs
           defaultValue="Submit"
@@ -208,7 +205,7 @@ export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug
           value={activeTab}
           onValueChange={(value) => setActiveTab(value)}
         >
-          <TabsList className="bg-gray-900 text-white">
+          <TabsList className="bg-gray-700 text-white">
             <TabsTrigger value="Submit">Submit</TabsTrigger>
             <TabsTrigger value="Submissions">Submissions</TabsTrigger>
           </TabsList>
@@ -217,7 +214,7 @@ export default function CodeEditor({dCode, slug} : {dCode: CodeEditorProps, slug
           <Submit defaultCode={dCode} slug = {slug} setActiveTab = {setActiveTab}/>
         </div>
         <div>
-          {activeTab == "Submissions" && <Submissions userId={TEST_USER_ID} problemId={dCode[0].problemId}/>}
+          {activeTab == "Submissions" && <Submissions problemId={dCode[0].problemId}/>}
         </div>
       </div>
       </div>

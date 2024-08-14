@@ -3,15 +3,22 @@ import { db } from "../../../db";
 import { getFullCode, getInputs, getOutputs } from "../../../lib/problem";
 import axios from "axios"
 import { rateLimit } from "../../../lib/rateLimiting";
-
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../lib/auth";
 const JUDGE0_URL = process.env.JUDGE0_URL
 const CALLBACK_URL = "https://cl-web-hook.vijaypreetham1.workers.dev/judge0"
 
 export async function POST(req: NextRequest){   
 
     try{
-        var {code, languageId, userId, problemId, slug} = await req.json();
+
+        const session = await getServerSession(authOptions)
+
+        if (!session || !session?.user) {
+            return NextResponse.json({}, { status: 401 });
+        }
+
+        var {code, languageId, problemId, slug} = await req.json();
         var languageExt;
                 
         // create hashmap and remove if else
@@ -24,7 +31,7 @@ export async function POST(req: NextRequest){
     
         }
 
-        const isAllowed = await rateLimit(userId, 1, 30); 
+        const isAllowed = await rateLimit(session.user.id, 1, 30); 
 
         if(!isAllowed){
             return NextResponse.json({
@@ -50,7 +57,7 @@ export async function POST(req: NextRequest){
         const submissionID = await db.submission.create({
             data: {
                 problemId,
-                userId, 
+                userId: session.user.id, 
                 code: userCode,
                 languageId
             }

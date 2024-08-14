@@ -39,9 +39,11 @@ app.put('/judge0', async (c) => {
 
         console.log(testCase.id);
 
-        testCases.push({status: submissions[submission].status, id: testCase.id})
+        testCases.push({status: submissions[submission].status, id: testCase.id, time: submissions[submission].time, memory: String(submissions[submission].memory)})
     }
 
+    console.log(testCases)
+    
     for (const test of testCases) {
 
       // Processing
@@ -65,6 +67,8 @@ app.put('/judge0', async (c) => {
           },
           data: {
             status: 'ACCEPTED',
+            time: test.time, 
+            memory: test.memory
           },
         });
       }
@@ -78,6 +82,8 @@ app.put('/judge0', async (c) => {
           },
           data: {
             status: 'REJECTED',
+            time: test.time, 
+            memory: test.memory
           },
         });
       }
@@ -91,6 +97,8 @@ app.put('/judge0', async (c) => {
             },
             data: {
               status: 'TLE',
+              time: test.time, 
+              memory: test.memory
             },
           });
         }

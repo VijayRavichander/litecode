@@ -25,6 +25,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 interface SubmisionProps {
   userId: string;
@@ -39,30 +40,45 @@ interface Submissions {
   testCase: any;
 }
 
+enum SubmissionResult {
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED",
+  PENDING = "PENDING",
+  TLE = "TLE", // Time Limit Exceeded
+  COMPILATIONERROR = "COMPILATIONERROR",
+  RUNTIMEERROR = "RUNTIMEERROR",
+  INTERNALERROR = "INTERNALERROR",
+}
+
+interface SubmissionStatusDecoratorProps {
+  status: SubmissionResult;
+}
+
 const apiUrl = process.env.HOST_URL || ".";
 
-export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
+export const SubmissionTable = ({problemId }: SubmisionProps) => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(8);
   const [offset, setOffset] = useState(0);
-  const [progress, setProgress] = useState(13)
+  const [progress, setProgress] = useState(90)
 
+  const session = useSession();
+  console.log(session)
 
   useEffect(() => {
-    const getSumbissions = async (userId, problemId, limit, offset) => {
+    const getSumbissions = async (problemId, limit, offset) => {
       const res = await axios.get(`/api/v1/submissions`, {
         params: {
-          userId,
           problemId,
           limit,
           offset,
         },
       });
-      setLoading(false);
       setSubmissions(res.data.res);
+      setLoading(false);
     };
-    getSumbissions(userId, problemId, limit, offset);
+    getSumbissions(problemId, limit, offset);
   }, [offset]);
 
   const handlePageChange = (offset) => {
@@ -70,14 +86,14 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
   };
   
   if (loading) {
-    return <div className = "my-5 mx-auto max-w-md">
+    return <div className = "my-5 mx-auto">
         <div>Loading...</div>
-        <Progress value={progress} />
+        {/* <Progress className="bg-white" value={progress} /> */}
     </div>;
   }
 
   if (submissions.length == 0){
-    return <div className = "">
+    return <div className = "mx-auto max-w-md text-lg text-white my-8">
       No Submissions Yet
     </div>
   }
@@ -85,14 +101,14 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
     <div className="my-4">
       <Table>
         <TableHeader>
-          <TableRow className="text-xl font-bold text-black">SUBMISSION DETAILS</TableRow>
+          <div className="text-xl font-bold my-4">SUBMISSION DETAILS</div>
         </TableHeader>
-        <TableBody>
+        <div className="bg-gray-800 rounded-xl min-w-full py-2">
           {submissions &&
             submissions.map((submission: Submissions) => (
                 <SubmisionRow key={submission.id} submission={submission}/>
             ))}
-        </TableBody>
+        </div>
       </Table>
 
       <Pagination>
@@ -115,10 +131,13 @@ export const SubmissionTable = ({ userId, problemId }: SubmisionProps) => {
   );
 };
 
-const ConvertToLocaleTime = (dateString: string) => {
+export function ConvertToLocaleTime (dateString: string){
   const date = new Date(dateString);
   return date.toLocaleString();
 };
+
+
+
 
 const SubmisionRow = ({ submission}: { submission: Submissions}) => {
 
@@ -126,7 +145,6 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
   const [total, setTotal] =  useState(0)
 
   useEffect(() => {
-    console.log(submission)
     if(submission.testCase){
       const accepted = submission?.testCase.filter((item) => item.status == "ACCEPTED").length
       setAccepted(accepted)
@@ -136,13 +154,14 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
   }, [])
 
   return (
-    <TableRow className="rounded m-3">
-      <TableCell>
+    <div className="rounded my-4 mx-4 p-4 bg-gray-950 rounded-xl">
+      <div>
         <div
-          className={`flex justify-between items-center ${submission.status == "ACCEPTED" ? "text-green-400" : "text-red-400"}`}
+          className={`flex justify-between items-center text-slate-300`}
         >
           <div>
-            <div>{submission.status}</div>
+            {/* <div>{submission.status}</div> */}
+            <div>{SubmissionStatusDecorator(submission.status)}</div>
             <div>{ConvertToLocaleTime(submission.createdAt)}</div>
           </div>
           <div className="">
@@ -151,7 +170,7 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
             </div>
           </div>
         </div>
-      </TableCell>
-    </TableRow>
+      </div>
+    </div>
   );
 };

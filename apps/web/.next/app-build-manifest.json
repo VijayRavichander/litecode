@@ -1,15 +1,20 @@
 {
   "pages": {
-    "/problem/[problemID]/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/problem/[problemID]/page.js"
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
+    ],
+    "/profile/[profileID]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/profile/[profileID]/page.js"
     ],
     "/problems/page": [
       "static/chunks/webpack.js",
@@ -22,10 +27,20 @@
       "static/css/app/problems/layout.css",
       "static/chunks/app/problems/layout.js"
     ],
+    "/problem/[problemID]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/problem/[problemID]/page.js"
+    ],
     "/contest/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/contest/page.js"
+    ],
+    "/contest/[contestID]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/contest/[contestID]/page.js"
     ]
   }
 }

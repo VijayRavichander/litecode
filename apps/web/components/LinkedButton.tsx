@@ -14,7 +14,7 @@ export const LinkedButton = (
 ) => {
     return <Link
     href = {href}
-    className=""
+    className={`${className}`}
     >
         {children}
     </Link>

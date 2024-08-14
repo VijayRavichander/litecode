@@ -9,7 +9,10 @@ import {
 } from "@repo/ui/components/ui/table";
 import { getProblems } from "../app/db/problem";
 import { LinkedButton } from "./LinkedButton";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "../app/lib/auth";
+import { redirect } from "next/navigation";
+import { Check, CircleDot } from "lucide-react";
 interface Problems {
   id: string;
   title: string;
@@ -30,11 +33,20 @@ interface Submission {
   createdAt: Date;
 }
 
+interface User {
+  id: string;
+  jwtToken: string;
+  email: string;
 
+}
 
 export default async function ProblemTable() {
   const problems: Problems[] = await getProblems();
-  console.log(problems);
+  const session = await getServerSession(authOptions);
+  
+  if(!session || !session?.user){
+    redirect("/");
+  }
 
   return (
     <Table>
@@ -49,24 +61,27 @@ export default async function ProblemTable() {
       <TableBody>
         {problems &&
           problems.map((problem: Problems) => (
-            <ProblemRow key={problem.id} problem={problem} />
+            <ProblemRow key={problem.id} problem={problem} user={session.user.id} />
           ))}
       </TableBody>
     </Table>
   );
 }
 
-const ProblemRow = ({ problem }: { problem: Problems }) => {
+const ProblemRow = ({ problem, user }: { problem: Problems, user: string }) => {
 
   const acceptedSolutions = problem.submissions.filter((item, index) => (item.status == "ACCEPTED")).length;
   const totalSolutions = problem.submissions.length;
   const acceptedPercentage = totalSolutions != 0 ? (acceptedSolutions / totalSolutions) : 0
   const difficulty = acceptedPercentage < 0.20 ? "Hard" : acceptedPercentage < 0.50 ? "Medium" : "Easy"
+  const solved = problem.submissions.filter((item, index) => (item.userId == user && item.status == "ACCEPTED"))
+  const attempted = problem.submissions.filter((item, index) => (item.userId == user && item.status != "ACCEPTED"))
+
   return (
     <TableRow>
-      <TableCell className="text-lg font-bold hover:text-violet-800">
-        <LinkedButton href={`/problem/${problem.id}`}>
-          {problem.title}
+      <TableCell className={`${solved.length != 0 ? "text-green-300" : attempted.length != 0 ? "text-yellow-300" : ""} text-lg font-bold hover:text-violet-800`}>
+        <LinkedButton className = "flex items-center" href={`/problem/${problem.id}`} >
+         {problem.title}<span className="px-2">{solved.length != 0 ? <Check /> : attempted.length != 0 ? <CircleDot /> : <></>}</span>
         </LinkedButton>
       </TableCell>
       <TableCell

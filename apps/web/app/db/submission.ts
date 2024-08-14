@@ -2,12 +2,12 @@ import {db} from "."
 
 // Get all the submissions of the user
 
-export const getSubmissions = async ( { userID } : {userID : string}) => {
+export const getSubmissions = async ( { profileID } : {profileID : string}) => {
 
     const userSubmissions = await db.submission.findMany({
         take: 8, 
         where: {
-            userId: userID 
+            userId: profileID 
         }, select: {
             status : true, 
             createdAt: true, 

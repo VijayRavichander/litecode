@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../../db";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../lib/auth";
 export async function GET(req: NextRequest){
-    
+
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session?.user) {
+        return NextResponse.json({}, { status: 401 });
+    }
+
+    const userId = session?.user.id
+
     const problemId = req.nextUrl.searchParams.get('problemId');
-    const userId = req.nextUrl.searchParams.get('userId');
     const limit =   Number(req.nextUrl.searchParams.get('limit'));
     const offset =  Number(req.nextUrl.searchParams.get('offset'));
 
@@ -19,7 +27,7 @@ export async function GET(req: NextRequest){
             id: true,
             createdAt: true,
             status: true,
-            testCase: true
+            testCase: true, 
         }, 
         orderBy: {
             createdAt:  'desc'
