@@ -5,8 +5,13 @@ import axios from "axios"
 import { rateLimit } from "../../../lib/rateLimiting";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/auth";
+
+
 const JUDGE0_URL = process.env.JUDGE0_URL
-const CALLBACK_URL = "https://cl-web-hook.vijaypreetham1.workers.dev/judge0"
+const JUDGE0_API_KEY = process.env.JUDGE0_API_KEY
+const CALLBACK_URL = process.env.CALLBACK_URL
+const JUDGE0_HOST = process.env.JUDGE0_HOST
+
 
 export async function POST(req: NextRequest){   
 
@@ -82,8 +87,8 @@ export async function POST(req: NextRequest){
             submissions: submissionPayload
         }, 
         {headers: {
-            'x-rapidapi-key': 'c16818d684msh01750f6dedefd81p184f87jsn32151e95c614',
-            'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
+            'x-rapidapi-key': JUDGE0_API_KEY,
+            'x-rapidapi-host': JUDGE0_HOST,
             'Content-Type': 'application/json'
         }})
 
