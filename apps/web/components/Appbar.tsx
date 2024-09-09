@@ -7,7 +7,7 @@ export function Appbar() {
   const session = useSession();
   const status = session.status;
   const id = session.data ? session.data.user.id : "";
-  
+
   return (
     <header className="bg-black text-white px-4 md:px-6 py-3 flex items-center justify-between border-b-2 border-violet-900">
       <Link href="/" className="flex items-center gap-2">
@@ -32,7 +32,7 @@ export function Appbar() {
           </Link>
           <Button
             onClick={() => {
-              signOut();
+              signOut({ callbackUrl: '/', redirect:true });
             }}
             className="hover:text-violet-500"
           >

@@ -1,9 +1,10 @@
 {
-  "/page": "app/page.js",
-  "/profile/[profileID]/page": "app/profile/[profileID]/page.js",
   "/problem/[problemID]/page": "app/problem/[problemID]/page.js",
-  "/contest/[contestID]/page": "app/contest/[contestID]/page.js",
-  "/contest/page": "app/contest/page.js",
+  "/page": "app/page.js",
+  "/api/v1/getProblem/route": "app/api/v1/getProblem/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/v1/submissions/route": "app/api/v1/submissions/route.js",
+  "/contest/page": "app/contest/page.js",
+  "/profile/[profileID]/page": "app/profile/[profileID]/page.js",
   "/problems/page": "app/problems/page.js"
 }

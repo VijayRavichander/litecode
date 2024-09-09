@@ -136,7 +136,59 @@ export function ConvertToLocaleTime (dateString: string){
   return date.toLocaleString();
 };
 
+export const SubmissionStatusDecorator = (status : SubmissionResult) => {
+  let bgColor = '';
+  let textColor = '';
+  let text = '';
 
+  switch (status) {
+    case SubmissionResult.ACCEPTED:
+      bgColor = 'bg-green-100';
+      textColor = 'text-green-300';
+      text = 'Accepted';
+      break;
+    case SubmissionResult.REJECTED:
+      bgColor = 'bg-red-100';
+      textColor = 'text-red-500';
+      text = 'Rejected';
+      break;
+    case SubmissionResult.PENDING:
+      bgColor = 'bg-yellow-100';
+      textColor = 'text-blue-300';
+      text = 'Pending';
+      break;
+    case SubmissionResult.TLE:
+      bgColor = 'bg-orange-100';
+      textColor = 'text-yellow-300';
+      text = 'Time Limit Exceeded';
+      break;
+    case SubmissionResult.COMPILATIONERROR:
+      bgColor = 'bg-purple-100';
+      textColor = 'text-rose-300';
+      text = 'Compilation Error';
+      break;
+    case SubmissionResult.RUNTIMEERROR:
+      bgColor = 'bg-indigo-100';
+      textColor = 'text-indigo-300';
+      text = 'Runtime Error';
+      break;
+    case SubmissionResult.INTERNALERROR:
+      bgColor = 'bg-gray-100';
+      textColor = 'text-gray-300';
+      text = 'Internal Error';
+      break;
+    default:
+      bgColor = 'bg-gray-100';
+      textColor = 'text-gray-300';
+      text = 'Unknown Status';
+  }
+
+  return (
+    <div className={`text-sm font-bold ${textColor}`}>
+      {text}
+    </div>
+  );
+}
 
 
 const SubmisionRow = ({ submission}: { submission: Submissions}) => {
@@ -160,7 +212,6 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
           className={`flex justify-between items-center text-slate-300`}
         >
           <div>
-            {/* <div>{submission.status}</div> */}
             <div>{SubmissionStatusDecorator(submission.status)}</div>
             <div>{ConvertToLocaleTime(submission.createdAt)}</div>
           </div>
