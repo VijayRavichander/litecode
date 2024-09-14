@@ -11,6 +11,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "@repo/ui": "workspace:*",
+    "@repo/store": "workspace:*", 
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "ioredis": "^5.4.1",
@@ -22,6 +23,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
+    "recoil": "^0.7.7",
     "remark-gfm": "^4.0.0",
     "request-ip": "^3.3.0"
   },

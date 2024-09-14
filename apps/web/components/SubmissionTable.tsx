@@ -206,7 +206,7 @@ const SubmisionRow = ({ submission}: { submission: Submissions}) => {
   }, [])
 
   return (
-    <div className="rounded my-4 mx-4 p-4 bg-gray-950 rounded-xl">
+    <div className="my-4 mx-4 p-4 bg-gray-950 rounded-xl">
       <div>
         <div
           className={`flex justify-between items-center text-slate-300`}

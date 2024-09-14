@@ -17,7 +17,7 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-neutral-900 text-white`}>
+      <body className={`${inter.className} bg-zince-900 text-white bg-black`}>
         <Providers>
         <div>
           <Appbar />
